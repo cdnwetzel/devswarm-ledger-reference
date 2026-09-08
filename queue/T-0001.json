@@ -1,0 +1,11 @@
+{
+ "task_id": "T-0001",
+ "state": "IN_REVIEW",
+ "approve_role": "code_review",
+ "author_seat": "S-Dev",
+ "reviewer_seat": "S-Review",
+ "mode": "REFERENCE",
+ "write_set": [
+  "greet.py"
+ ]
+}
