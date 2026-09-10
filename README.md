@@ -88,7 +88,10 @@ other than `task_id + head + role`. Defence in depth, not redundancy.
 
 `reviewer.asc` is a demo key and its uid says so. It was generated
 non-interactively, unprotected, by a script — **the exact opposite of the RL-010
-standard in `docs/keys/README.md`**, which governs real approval keys.
+standard in `docs/keys/README.md`**, which governs real approval keys. (RL-010 was
+amended — charter Decision 0017 — to a hardware-resident, non-exportable key; it
+still preserves a *marked* software fallback, and this demo key is the opposite of
+even that.)
 
 Its private half was never committed and no longer exists; it was destroyed with
 the temporary keyring that produced it. Verification does not need it. A
