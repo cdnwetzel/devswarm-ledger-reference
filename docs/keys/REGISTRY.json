@@ -1,0 +1,15 @@
+{
+  "schema": "devswarm-ledger.key-registry.v1",
+  "about": "Every approval-signing key the verifier may import, with the facts a merge gate needs to RECORD rather than assume (charter Decision 0020 item 7; RL-010 as amended by Decision 0017). residency 'card' = hardware-resident, non-exportable, gesture per signature -> rows say mechanism=hardware; 'software' = the interactive software fallback -> rows say mechanism=fallback (RL-010 non-compliant: software key). A key file in this directory that is not listed here does not verify; a key with a 'retired' date is no longer imported, and its file stays only so the rows it signed keep verifying by hand. holder must equal the bare name in the key's uid, which is what ledger rows carry as author_human.",
+  "keys": [
+    {
+      "file": "reviewer.asc",
+      "fingerprint": "7C054E8070CEB40AF5028CDB5A814D582CF42400",
+      "holder": "Rex Reviewer",
+      "residency": "software",
+      "registered": "2026-09-08",
+      "retired": null,
+      "note": "DEMO key for this reference ledger only (see README.md); a real ledger never lists it"
+    }
+  ]
+}

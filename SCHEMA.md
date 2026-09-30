@@ -23,6 +23,8 @@ One JSON object per line, append-only, hash-chained.
 
 **Chain rule:** a row's hash is `sha256(canonical_form)` (the `prev_hash` field included). Row N's `prev_hash` must equal row N−1's hash. The genesis row's `prev_hash` is 64 zeros. The **ledger head hash** is the hash of the last row — this is the value approval signatures bind to.
 
+**Evidence conventions** (no new fields; `evidence` carries `key=value` pairs the way `mode=BRIDGE` does): on `SIGNED` and `MERGED` rows the merge gate writes `approval_tier=<single-reviewer|two-human>`, `mechanism=<hardware (RL-010: non-exportable key, gesture per signature) | fallback (RL-010 non-compliant: software key)>` derived from `docs/keys/REGISTRY.json` (never supplied by the signer or a flag), and, when the author signed on a single-reviewer scope, `sod_exception=author≠reviewer (author signed; scope single-reviewer)` (charter Decision 0020). On `EXECUTED` rows the runner writes provenance when it knows it: `run=<run id> model=<resolved model> pxx=<version> identity=<psguard identity>`.
+
 **Corrections:** a wrong row is never edited or deleted (RL-009). Append an `action: "CORRECTION"` row whose `evidence` names the erroneous row's hash and states the correction. The error stays visible; that is the point.
 
 Verify any copy with `python3 tools/verify_chain.py` — exit 0 and a head hash, or a stop-the-line failure. A broken chain is a kill condition, not a recoverable error.
@@ -36,5 +38,7 @@ One state file per task, named `<task_id>.json`, holding the current state: `ADM
 GPG **detached** signatures over the canonical string `task_id + ledger_head_hash + role` (exact concatenation, no separators, UTF-8). Named `<task_id>.<role>.asc`. Valid only if: the key belongs to the human accountable for that role (public keys in `docs/keys/`), the signer is not the change's author where an invariant requires separation, and the signed head hash is the **current** head (a stale-head signature is invalid — RL-003).
 
 ## `docs/keys/`
+
+`REGISTRY.json` lists every key file here with `fingerprint`, `holder` (the bare uid name, equal to `author_human`), `residency` (`card` | `software`), `registered` and `retired`. The verifier imports only listed, unretired keys; a file it does not list does not verify. A retired file stays so past signatures verify by hand.
 
 Each member's public signing key, `<name>.asc`. The private keys are **hardware-resident and non-exportable** to the RL-010 standard (amended — charter Decision 0017): they live on a CCID OpenPGP token, every signature needs a physical gesture, and they are a **different key** from the one backing `pass`/age. Until a token is present, the original interactive software ceremony is the marked fallback, and every row it signs records `mechanism` as fallback.

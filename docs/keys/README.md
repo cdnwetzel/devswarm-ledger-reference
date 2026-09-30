@@ -40,3 +40,7 @@ signature" is the whole load-bearing claim of RL-003.
 Verification never needs the private half. If you extend the ledger and need to
 re-sign, `tools/new_demo_approval.sh` generates a fresh demo key of your own,
 registers its public half here, and signs the current head.
+
+## Registry (Decision 0020, 2026-09-30)
+
+`REGISTRY.json` is the list the verifier reads: fingerprint, holder, residency, registered, retired. Add a key by adding its file AND its entry in one commit; retire one by setting `retired` (and, as before, renaming the file with its date) — never by deleting it while a ledger row was signed with it. `dx merge` derives each SIGNED/MERGED row's `mechanism=` from the entry's residency, so a hardware token counts only once it is registered as `card`.
