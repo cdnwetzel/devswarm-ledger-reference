@@ -24,26 +24,27 @@ the format: it delegates chain verification to `tools/verify_chain.py` and reads
 
 | Path | What it is |
 | --- | --- |
-| `ledger.jsonl` | Three synthetic rows with their own genesis, in canonical form |
+| `ledger.jsonl` | Four synthetic rows with their own genesis, in canonical form (GENESIS, ADMITTED, EVIDENCE, EXECUTED — the last added in `17884ae` so `dx merge` has a candidate to bind) |
 | `queue/T-0001.json` | One task in `IN_REVIEW`, `approve_role: code_review` |
 | `approvals/T-0001.code_review.{asc,msg}` | A real GPG detached signature over the real head |
 | `docs/keys/reviewer.asc` | The demo signer's **public** key |
 | `tools/verify_chain.py` | The chain verifier — stdlib only, no dependencies |
 | `tools/new_demo_approval.sh` | Regenerate a demo key and re-sign after extending the ledger |
+| `tools/check_readme.py` | Fails when this README's quoted row count or head drifts from the ledger |
 | `SCHEMA.md` | Field definitions, canonical form, chain rule, correction convention |
 
 ## Verify it
 
 ```
 $ python3 tools/verify_chain.py ledger.jsonl
-OK: 3 row(s) verified. Ledger head hash: b8b8baca959ddfbe049f6703a2ed687211eaed4ad36f2c62ddd38df85be231f4
+OK: 4 row(s) verified. Ledger head hash: 703ddac94bc263ff50ac6a01f3c0b3c4ce521953bfe4bcee0ac03e9905ba0f30
 ```
 
 ## Run the gate
 
 ```
 $ DX_LEDGER_REPO=$PWD dx merge T-0001
-✅ Ledger chain verifies. Head: b8b8baca959ddfbe…
+✅ Ledger chain verifies. Head: 703ddac94bc263ff…
 ✅ Signature verified. Signer: Rex Reviewer <reviewer@example.invalid>
 ✅ Signed message binds task_id + current head + role.
 ✅ Separation of duties: author 'Ada Author' ≠ signer 'Rex Reviewer'.
@@ -61,7 +62,7 @@ away from what the signature binds to:
 $ DX_LEDGER_REPO=$PWD dx merge T-0001
 ✅ Ledger chain verifies. Head: ed127b72ca5642a3…
 ✅ Signature verified. Signer: Rex Reviewer <reviewer@example.invalid>
-❌ Stale signature (RL-003). Signed head b8b8baca959ddfbe… but current head is
+❌ Stale signature (RL-003). Signed head 703ddac94bc263ff… but current head is
    ed127b72ca5642a3…. Re-sign after re-verifying the chain.
 exit 1
 ```
